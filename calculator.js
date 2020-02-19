@@ -32,20 +32,32 @@ function operate(op, x, y) {
 }
 
 function updateDisplay(e) {
-    let display = document.getElementById(currInput);
-    if(display.textContent == "") {
-        display.textContent = e.target.textContent;
+    let display = document.getElementById("display");
+    if(newNum) {
+        let content = document.createElement("p");
+        content.classList.add("input");
+        content.textContent = e.target.textContent;
+        display.appendChild(content);
+        newNum = false;
     } else {
-        display.textContent += e.target.textContent;
+        let inputs = Array.from(document.querySelectorAll(".input"));
+        let editInput = inputs[inputs.length - 1];
+        editInput.textContent += e.target.textContent;
+
     }
+    
 }
 
 function updateOperand(e) {
-    currInput = "yDisplay";
-    let display = document.getElementById("opDisplay");
-    display.textContent = e.target.textContent;
+    let display = document.getElementById("display");
+    let content = document.createElement("p");
+    content.classList.add("operand");
+    content.textContent = e.target.textContent;
+    display.appendChild(content);
+    newNum = true;
 }
 
+/*
 function getResult(e) {
     let display = document.getElementById("result");
     let operand = document.getElementById("opDisplay").textContent;
@@ -61,12 +73,13 @@ function clear(e) {
     let op = document.getElementById("opDisplay");
     op.textContent = "+";
 }
-
-let currInput = "xDisplay"; 
+*/
+let newNum = true; //let true if inputs are going to be new numbers
+ 
 
 let numbers = Array.from(document.querySelectorAll(".num"));
 numbers.forEach(num => num.addEventListener("click", updateDisplay));
 let ops = Array.from(document.querySelectorAll(".op"));
 ops.forEach(op => op.addEventListener("click", updateOperand));
-document.getElementById("equals").addEventListener("click", getResult);
-document.getElementById("clear").addEventListener("click", clear);
+/*document.getElementById("equals").addEventListener("click", getResult);
+document.getElementById("clear").addEventListener("click", clear);*/
