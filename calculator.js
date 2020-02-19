@@ -28,3 +28,17 @@ function operate(op, x, y) {
         mult(x, y);
     }
 }
+
+function updateDisplay(e) {
+    let display = document.getElementById(currInput);
+    if(display.textContent == "0") {
+        display.textContent = e.target.textContent;
+    } else {
+        display.textContent += e.target.textContent;
+    }
+}
+
+let currInput = "x"; 
+
+let numbers = Array.from(document.querySelectorAll(".num"));
+numbers.forEach(num => num.addEventListener("click", updateDisplay));
