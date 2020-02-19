@@ -34,7 +34,6 @@ function updateDisplay(e) {
     if(newNum) {
         let content = document.createElement("p");
         content.classList.add("input");
-        content.classList.add("input");
         content.textContent = e.target.textContent;
         display.appendChild(content);
         newNum = false;
@@ -50,8 +49,7 @@ function updateDisplay(e) {
 function updateOperand(e) {
     let display = document.getElementById("display");
     let content = document.createElement("p");
-    content.classList.add("operand");
-    content.classList.add("tbc");
+    content.classList.add("operand");;
     content.textContent = e.target.textContent;
     display.appendChild(content);
     newNum = true;
@@ -67,22 +65,19 @@ function getResult(e) {
         result = operate(operands[i].textContent, result, parseInt(inputs[i + 1].textContent));
     }
     let resultDisplay = document.createElement("p");
-    resultDisplay.classList.add("tbc");
     resultDisplay.textContent = " = " + result;
     display.appendChild(resultDisplay);
     
 
 
 }
-/*
+
 function clear(e) {
-    currInput = "xDisplay";
-    let tbc = Array.from(document.querySelectorAll(".tbc"));
-    tbc.forEach(display => display.textContent = "");
-    let op = document.getElementById("opDisplay");
-    op.textContent = "+";
+    newNum = true;
+    let display = document.getElementById("display");
+    display.innerHTML = "";
 }
-*/
+
 let newNum = true; //let true if inputs are going to be new numbers
  
 
@@ -91,4 +86,4 @@ numbers.forEach(num => num.addEventListener("click", updateDisplay));
 let ops = Array.from(document.querySelectorAll(".op"));
 ops.forEach(op => op.addEventListener("click", updateOperand));
 document.getElementById("equals").addEventListener("click", getResult);
-//document.getElementById("clear").addEventListener("click", clear);
+document.getElementById("clear").addEventListener("click", clear);
