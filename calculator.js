@@ -35,17 +35,26 @@ function operate(op, x, y) {
 
 function updateDisplay(e) {
     let display = document.getElementById("display");
-    if (newNum) {
-        let content = document.createElement("p");
-        content.classList.add("input");
-        content.textContent = e.target.textContent;
-        display.appendChild(content);
-        newNum = false;
+    let input = e.target.textContent;
+    if(input == "." && decExists) {
+        alert("Invalid input: Number cannot have more than one decimal point");
+        return;
     } else {
-        let inputs = Array.from(document.querySelectorAll(".input"));
-        let editInput = inputs[inputs.length - 1];
-        editInput.textContent += e.target.textContent;
-
+        if (newNum) {
+            let content = document.createElement("p");
+            content.classList.add("input");
+            content.textContent = input;
+            display.appendChild(content);
+            newNum = false;
+        } else {
+            let inputs = Array.from(document.querySelectorAll(".input"));
+            let editInput = inputs[inputs.length - 1];
+            editInput.textContent += input;
+    
+        }
+        if(input == ".") {
+            decExists = true;
+        }
     }
 
 }
@@ -57,6 +66,7 @@ function updateOperand(e) {
     content.textContent = e.target.textContent;
     display.appendChild(content);
     newNum = true;
+    decExists = false;
 }
 
 
@@ -68,9 +78,9 @@ function getResult(e) {
     let display = document.getElementById("display");
     let inputs = Array.from(document.querySelectorAll(".input"));
     let operands = Array.from(document.querySelectorAll(".operand"));
-    let result = parseInt(inputs[0].textContent);
+    let result = parseFloat(inputs[0].textContent);
     for (let i = 0; i < operands.length && !divideByZero; i++) {
-        result = operate(operands[i].textContent, result, parseInt(inputs[i + 1].textContent));
+        result = operate(operands[i].textContent, result, parseFloat(inputs[i + 1].textContent));
     }
     if (!divideByZero) {
         let resultDisplay = document.createElement("p");
@@ -83,6 +93,8 @@ function getResult(e) {
 
 function clear() {
     newNum = true;
+    decExists = false;
+    divideByZero = false;
     let display = document.getElementById("display");
     display.innerHTML = "";
 }
@@ -98,3 +110,4 @@ let ops = Array.from(document.querySelectorAll(".op"));
 ops.forEach(op => op.addEventListener("click", updateOperand));
 document.getElementById("equals").addEventListener("click", getResult);
 document.getElementById("clear").addEventListener("click", clear);
+document.getElementById("period").addEventListener("click", updateDisplay);
