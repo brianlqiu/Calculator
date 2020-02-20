@@ -28,7 +28,7 @@ function operate(op, x, y) {
         }
         return div(x, y);
     }
-    if (op == 'x') {
+    if (op == '*') {
         return mult(x, y);
     }
 }
@@ -102,7 +102,6 @@ function updateOperand(e) {
 function getResult(e) {
     if (newNum) {
         alert("Invalid input: Equation cannot end on an operand");
-        clear();
         return;
     }
     if(displayingResult) {
@@ -111,7 +110,15 @@ function getResult(e) {
     }
     let display = document.getElementById("display");
     let inputs = Array.from(document.querySelectorAll(".input"));
+    if(inputs.length < 2) {
+        alert("Invalid input: Equation cannot only have one number");
+        return;
+    }
     let operands = Array.from(document.querySelectorAll(".operand"));
+    if(operands.length == 0) {
+        alert("Invalid input: Equation needs at least 1 operand");
+        return;
+    }
     let result = parseFloat(inputs[0].textContent);
     for (let i = 0; i < operands.length && !divideByZero; i++) {
         result = operate(operands[i].textContent, result, parseFloat(inputs[i + 1].textContent));
@@ -154,7 +161,13 @@ function keyboardControls(e) {
         updateDisplay(e);
     } else if(e.key.match(operatorRegex)) {
         updateOperand(e);
-    } else if(e.key.match())
+    } else if(e.key == "Enter") {
+        getResult(e);
+    } else if(e.key == "Backspace") {
+        remove();
+    } else if(e.key == "Escape") {
+        clear();
+    }
     
 }
 
