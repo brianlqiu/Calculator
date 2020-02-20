@@ -34,6 +34,9 @@ function operate(op, x, y) {
 }
 
 function updateDisplay(e) {
+    if(displayingResult) {
+        clear();
+    }
     let display = document.getElementById("display");
     let input = e.target.textContent;
     if(input == "." && decExists) {
@@ -60,7 +63,21 @@ function updateDisplay(e) {
 }
 
 function updateOperand(e) {
+    if(displayingResult) {
+        clear();
+    }
     let display = document.getElementById("display");
+    let displayNodes = Array.from(display.childNodes);
+    console.log(displayNodes.length);
+    console.log(typeof displayNodes)
+    if(displayNodes.length == 0) {
+        alert("Invalid input: Cannot start equation with an operand");
+        return;
+    }
+    if(displayNodes[displayNodes.length - 1].getAttribute("class") == "operand") {
+        alert("Invalid input: Cannot have two operands following each other");
+        return;
+    }
     let content = document.createElement("p");
     content.classList.add("operand");
     content.textContent = e.target.textContent;
@@ -73,7 +90,12 @@ function updateOperand(e) {
 function getResult(e) {
     if (newNum) {
         alert("Invalid input: Equation cannot end on an operand");
-        clear()
+        clear();
+        return;
+    }
+    if(displayingResult) {
+        clear();
+        return;
     }
     let display = document.getElementById("display");
     let inputs = Array.from(document.querySelectorAll(".input"));
@@ -86,6 +108,7 @@ function getResult(e) {
         let resultDisplay = document.createElement("p");
         resultDisplay.textContent = " = " + result;
         display.appendChild(resultDisplay);
+        displayingResult = true;
     } else {
         clear();
     }
@@ -95,14 +118,26 @@ function clear() {
     newNum = true;
     decExists = false;
     divideByZero = false;
+    displayingResult = false;
     let display = document.getElementById("display");
     display.innerHTML = "";
 }
 
+function remove() {
+    let display = document.getElementById("display");
+    let displayNodes = Array.from(display.childNodes);
+    let lastNode = displayNodes[displayNodes.length - 1];
+    if(newNum || lastNode.textContent.length <= 1) {
+        display.removeChild(lastNode);
+    } else {
+        lastNode.textContent = lastNode.textContent.substr(0, lastNode.textContent.length - 1);
+    }
+}
 
 let newNum = true; //let true if inputs are going to be new numbers
 let decExists = false;
 let divideByZero = false;
+let displayingResult = false;
 
 let numbers = Array.from(document.querySelectorAll(".num"));
 numbers.forEach(num => num.addEventListener("click", updateDisplay));
@@ -111,3 +146,4 @@ ops.forEach(op => op.addEventListener("click", updateOperand));
 document.getElementById("equals").addEventListener("click", getResult);
 document.getElementById("clear").addEventListener("click", clear);
 document.getElementById("period").addEventListener("click", updateDisplay);
+document.getElementById("back").addEventListener("click", remove);
