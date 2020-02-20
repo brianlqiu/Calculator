@@ -38,7 +38,13 @@ function updateDisplay(e) {
         clear();
     }
     let display = document.getElementById("display");
-    let input = e.target.textContent;
+    let input = "";
+    if(e.type == "keyup") {
+        input = e.key;
+    } else {
+        input = e.target.textContent;
+    }
+    console.log(e);
     if(input == "." && decExists) {
         alert("Invalid input: Number cannot have more than one decimal point");
         return;
@@ -68,8 +74,6 @@ function updateOperand(e) {
     }
     let display = document.getElementById("display");
     let displayNodes = Array.from(display.childNodes);
-    console.log(displayNodes.length);
-    console.log(typeof displayNodes)
     if(displayNodes.length == 0) {
         alert("Invalid input: Cannot start equation with an operand");
         return;
@@ -80,7 +84,15 @@ function updateOperand(e) {
     }
     let content = document.createElement("p");
     content.classList.add("operand");
-    content.textContent = e.target.textContent;
+    let input = "";
+    console.log(e);
+    if(e.type == "keyup") {
+        input = e.key;
+    } else {
+        input = e.target.textContent;
+    }
+    console.log(input);
+    content.textContent = input;
     display.appendChild(content);
     newNum = true;
     decExists = false;
@@ -134,6 +146,18 @@ function remove() {
     }
 }
 
+function keyboardControls(e) {
+    const numberRegex = /[.0-9]/;
+    const operatorRegex = /[\+\-\*\/]/;
+    console.log(e.key.match(operatorRegex));
+    if(e.key.match(numberRegex)) {
+        updateDisplay(e);
+    } else if(e.key.match(operatorRegex)) {
+        updateOperand(e);
+    } else if(e.key.match())
+    
+}
+
 let newNum = true; //let true if inputs are going to be new numbers
 let decExists = false;
 let divideByZero = false;
@@ -147,3 +171,5 @@ document.getElementById("equals").addEventListener("click", getResult);
 document.getElementById("clear").addEventListener("click", clear);
 document.getElementById("period").addEventListener("click", updateDisplay);
 document.getElementById("back").addEventListener("click", remove);
+
+document.addEventListener("keyup", keyboardControls);
